@@ -12,7 +12,7 @@ class WannaCry:
     def __init__(self, root):
         self.root = root
         self.root.title("WannaCry - Ransomware")
-        self.root.geometry("300x150")
+        self.root.geometry("300x200")
         self.root.resizable(False, False)
         self.root.configure(bg='#0F1626')  # Background color
 
@@ -23,6 +23,14 @@ class WannaCry:
 
         self.label = ttk.Label(root, text="¡Tus archivos están siendo encriptados!\n¡No cierres esta ventana!", foreground="#FF0000", font=("Arial", 12, "bold"), background='#0F1626')
         self.label.pack(pady=10)
+
+        self.decrypt_code = tk.StringVar()
+
+        self.decrypt_button = ttk.Button(root, text="Decrypt", command=self.decrypt_files)
+        self.decrypt_button.pack(pady=5)
+
+        self.decrypt_code_entry = ttk.Entry(root, textvariable=self.decrypt_code, show="*")
+        self.decrypt_code_entry.pack(pady=5)
 
         self.menu_bar = tk.Menu(root)
         self.root.config(menu=self.menu_bar)
@@ -64,6 +72,16 @@ class WannaCry:
     def about_wannacry(self):
         messagebox.showinfo("Acerca de WannaCry", "WannaCry es un ransomware que encripta tus archivos y solicita un rescate en Bitcoin para recuperarlos.")
         logging.info("User asked for information about WannaCry.")
+
+    def decrypt_files(self):
+        decryption_code = self.decrypt_code.get()
+        if decryption_code == "123456":
+            messagebox.showinfo("Desencriptación", "El código de desencriptación es correcto. El programa se cerrará ahora.")
+            logging.info("Decryption code entered correctly. Program closing.")
+            self.root.quit()
+        else:
+            messagebox.showerror("Error de Desencriptación", "El código de desencriptación es incorrecto. Inténtalo de nuevo.")
+            logging.info("Incorrect decryption code entered.")
 
 def disable_close_button():
     messagebox.showinfo("No se puede cancelar", "¡Tus archivos están siendo encriptados! ¡No puedes cerrar esta ventana!")
