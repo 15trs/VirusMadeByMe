@@ -3,6 +3,10 @@ from tkinter import ttk
 from tkinter import messagebox
 import threading
 import time
+import logging
+
+# Configuring logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class WannaCry:
     def __init__(self, root):
@@ -27,6 +31,9 @@ class WannaCry:
         self.timer_thread = threading.Thread(target=self.timer)
         self.timer_thread.start()
 
+        # Logging actions
+        logging.info("WannaCry ransomware initialized.")
+
     def timer(self):
         start_time = time.time()
         while self.encrypting:
@@ -38,16 +45,20 @@ class WannaCry:
         self.encrypting = False
         self.label.config(text="¡Encriptación detenida!\nTus archivos están a salvo... por ahora.")
         self.stop_button.config(state="disabled")
+        logging.info("Encryption stopped.")
 
 def disable_close_button():
     messagebox.showinfo("No se puede cancelar", "¡Tus archivos están siendo encriptados! ¡No puedes cerrar esta ventana!")
+    logging.info("User tried to close the window.")
 
 def main():
+    logging.info("Application started.")
     root = tk.Tk()
     root.configure(bg='#0F1626')  # Background color
     root.protocol("WM_DELETE_WINDOW", disable_close_button)
     ransomware = WannaCry(root)
     root.mainloop()
+    logging.info("Application closed.")
 
 if __name__ == "__main__":
     main()
