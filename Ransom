@@ -1,8 +1,7 @@
 import os
 import sys
 import ctypes
-import pycryptodome
-from pycryptodome.fernet import Fernet
+from cryptography.fernet import Fernet
 
 def is_system_file(file_path):
     if file_path.startswith(sys.prefix) or file_path.startswith(sys.exec_prefix):
